@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const Search = () => {
   const [url, setUrl] = useState('');
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,12 +16,15 @@ const Search = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:3001/data', { url });
+      const response = await axios.post('http://localhost:3001/data', { url }, { responseType: 'blob' });
 
-      console.log(response);
-
-      setData(response.data); // Assuming the data is under the 'subtitles' key
-
+      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', 'subtitles.txt');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,12 +50,6 @@ const Search = () => {
 
       {loading && <div style={styles.loading}>Loading...</div>}
       {error && <div style={styles.error}>Error: {error}</div>}
-      {data && (
-        <div style={styles.data}>
-          <h2>Subtitles:</h2>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
     </div>
   );
 };
@@ -85,10 +81,6 @@ const styles = {
     marginTop: '20px',
     fontSize: '18px',
     color: 'red',
-  },
-  data: {
-    marginTop: '20px',
-    fontSize: '16px',
   },
 };
 
