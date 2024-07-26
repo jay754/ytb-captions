@@ -1,9 +1,5 @@
-"use client"
-
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const base_url = "http://localhost:3001/data"
 
 const Search = () => {
   const [url, setUrl] = useState('');
@@ -12,7 +8,7 @@ const Search = () => {
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
-    setUrl(e.target.value)
+    setUrl(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -20,38 +16,41 @@ const Search = () => {
     setLoading(true);
     setError(null);
 
-    const postData = { key: url }; // Replace with your actual data
-
     try {
-      const response = await axios.post(base_url, postData);
-      setData(response.data);
+      const response = await axios.post('http://localhost:3001/data', { url });
+
+      console.log(response);
+
+      setData(response.data); // Assuming the data is under the 'subtitles' key
+
     } catch (err) {
-      setError(err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1> ytb-captions </h1>
-      <form onSubmit={handleSubmit}>
+    <div style={styles.container}>
+      <h1>Fetch YouTube Subtitles</h1>
+      <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="text"
           value={url}
           onChange={handleChange}
-          placeholder="Enter URL"
+          placeholder="Enter YouTube URL"
           required
+          style={styles.input}
         />
         <br />
-        <button type="submit">Get subtitles</button>
+        <button type="submit" style={styles.button}>Fetch Subtitles</button>
       </form>
 
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
+      {loading && <div style={styles.loading}>Loading...</div>}
+      {error && <div style={styles.error}>Error: {error}</div>}
       {data && (
-        <div>
-          <h2>Response Data:</h2>
+        <div style={styles.data}>
+          <h2>Subtitles:</h2>
           <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
       )}
@@ -59,10 +58,38 @@ const Search = () => {
   );
 };
 
-export default function Home() {
-  return (
-    <h1>
-      <Search />
-    </h1> 
-  );
-}
+const styles = {
+  container: {
+    textAlign: 'center',
+    fontFamily: 'Arial, sans-serif',
+  },
+  form: {
+    marginTop: '20px',
+  },
+  input: {
+    padding: '10px',
+    fontSize: '16px',
+    width: '300px',
+    margin: '10px 0',
+  },
+  button: {
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+  },
+  loading: {
+    marginTop: '20px',
+    fontSize: '18px',
+  },
+  error: {
+    marginTop: '20px',
+    fontSize: '18px',
+    color: 'red',
+  },
+  data: {
+    marginTop: '20px',
+    fontSize: '16px',
+  },
+};
+
+export default Search;

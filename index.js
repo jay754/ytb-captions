@@ -15,8 +15,7 @@ app.use(cors())
 // POST route to handle YouTube subtitle extraction
 app.post('/data', async (req, res) => {
     
-    const videoId = req.body.key.split("v=")[1]
-    
+    const videoId = req.body.url.split("v=")[1];
     const lang = req.body.lang || 'en';
 
     if (!videoId) {
