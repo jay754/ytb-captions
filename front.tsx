@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -33,55 +35,24 @@ const Search = () => {
   };
 
   return (
-    <div style={styles.container}>
+    <div>
       <h1>Fetch YouTube Subtitles</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={url}
           onChange={handleChange}
           placeholder="Enter YouTube URL"
           required
-          style={styles.input}
         />
         <br />
-        <button type="submit" style={styles.button}>Fetch Subtitles</button>
+        <button type="submit">Fetch Subtitles</button>
       </form>
 
-      {loading && <div style={styles.loading}>Loading...</div>}
-      {error && <div style={styles.error}>Error: {error}</div>}
+      {loading && <div>Loading...</div>}
+      {error && <div >Error: {error}</div>}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    textAlign: 'center',
-    fontFamily: 'Arial, sans-serif',
-  },
-  form: {
-    marginTop: '20px',
-  },
-  input: {
-    padding: '10px',
-    fontSize: '16px',
-    width: '300px',
-    margin: '10px 0',
-  },
-  button: {
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer',
-  },
-  loading: {
-    marginTop: '20px',
-    fontSize: '18px',
-  },
-  error: {
-    marginTop: '20px',
-    fontSize: '18px',
-    color: 'red',
-  },
 };
 
 export default Search;
