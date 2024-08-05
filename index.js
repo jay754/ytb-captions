@@ -11,6 +11,10 @@ const port = 3001;
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
+
 app.post('/data', async (req, res) => {
   const videoId = req.body.url.split("v=")[1];
   const lang = req.body.lang || 'en';
