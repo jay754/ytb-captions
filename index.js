@@ -21,19 +21,21 @@ app.post('/data', async (req, res) => {
 
   console.log("hello")
 
-  // try {
-  //   const videoUrl = new URL(req.body.url);
-  //   videoId = videoUrl.searchParams.get("v");
+  try {
+    const videoUrl = new URL(req.body.url);
+    videoId = videoUrl.searchParams.get("v");
 
-  //   if (!videoId) {
-  //     videoId = videoUrl.pathname.split('/')[1];
-  //   }
+    if (!videoId) {
+      videoId = videoUrl.pathname.split('/')[1];
+    }
 
-  //   console.log("Extracted Video ID:", videoId);
-  // } catch (err) {
-  //   console.error('Error parsing URL:', err);
-  //   return res.status(400).send('Invalid URL format');
-  // }
+    console.log(videoId)
+
+    console.log("Extracted Video ID:", videoId);
+  } catch (err) {
+    console.error('Error parsing URL:', err);
+    return res.status(400).send('Invalid URL format');
+  }
 
   // const lang = req.body.lang || 'en';
 
