@@ -15,7 +15,20 @@ app.get('/hello', (req, res) => {
 });
 
 app.post('/data', async (req, res) => {
-  const videoId = req.body.url.split("v=")[1];
+  let videoId;
+
+  try {
+    const videoUrl = new URL(req.body.url);
+    videoId = videoUrl.searchParams.get("v");
+    
+    if (!videoId) {
+      // Attempt to extract video ID from a shortened URL or other formats
+      videoId = videoUrl.pathname.split('/')[1];
+    }
+  } catch (err) {
+    return res.status(400).send('Invalid URL format');
+  }
+
   const lang = req.body.lang || 'en';
 
   if (!videoId) {
@@ -28,8 +41,12 @@ app.post('/data', async (req, res) => {
       lang: lang
     });
 
-    // Prepare the subtitles text
-    const subtitlesText = captions.map(caption => `${caption.start} - ${caption.start + caption.dur}: ${caption.text}`).join('\n');
+    if (captions.length === 0) {
+      return res.status(404).send('No subtitles found for this video');
+    }
+
+    // Prepare the subtitles text, one subtitle per line
+    const subtitlesText = captions.map(caption => caption.text).join('\n');
 
     // Set headers to force download
     res.setHeader('Content-Disposition', `attachment; filename=${videoId}_subtitles.txt`);
@@ -42,6 +59,8 @@ app.post('/data', async (req, res) => {
     res.status(500).send('Error fetching subtitles');
   }
 });
+
+
 
 const port = process.env.PORT || 3001;
 
