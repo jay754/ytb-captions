@@ -37,11 +37,11 @@ app.post('/data', async (req, res) => {
     return res.status(400).send('Invalid URL format');
   }
 
-  // const lang = req.body.lang || 'en';
+  const lang = req.body.lang || 'en';
 
-  // if (!videoId) {
-  //   return res.status(400).send('Video ID is required');
-  // }
+  if (!videoId) {
+    return res.status(400).send('Video ID is required');
+  }
 
   // try {
   //   const captions = await getSubtitles({ videoID: videoId, lang: lang });
