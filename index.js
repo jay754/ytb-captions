@@ -55,10 +55,10 @@ app.post('/data', async (req, res) => {
   //   res.setHeader('Content-Type', 'text/plain');
 
   //   res.send(subtitlesText);
-  } catch (err) {
-    console.error("Error fetching subtitles:", err);
-    res.status(500).send('Error fetching subtitles');
-  }
+  // } catch (err) {
+  //   console.error("Error fetching subtitles:", err);
+  //   res.status(500).send('Error fetching subtitles');
+  // }
 });
 
 
