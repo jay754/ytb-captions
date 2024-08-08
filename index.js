@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const {
   getSubtitles
 } = require('youtube-captions-scraper');
+
 const cors = require('cors');
 
 const app = express();
@@ -17,40 +19,42 @@ app.get('/hello', (req, res) => {
 app.post('/data', async (req, res) => {
   let videoId;
 
-  try {
-    const videoUrl = new URL(req.body.url);
-    videoId = videoUrl.searchParams.get("v");
+  console.log("hello")
 
-    if (!videoId) {
-      videoId = videoUrl.pathname.split('/')[1];
-    }
+  // try {
+  //   const videoUrl = new URL(req.body.url);
+  //   videoId = videoUrl.searchParams.get("v");
 
-    console.log("Extracted Video ID:", videoId);
-  } catch (err) {
-    console.error('Error parsing URL:', err);
-    return res.status(400).send('Invalid URL format');
-  }
+  //   if (!videoId) {
+  //     videoId = videoUrl.pathname.split('/')[1];
+  //   }
 
-  const lang = req.body.lang || 'en';
+  //   console.log("Extracted Video ID:", videoId);
+  // } catch (err) {
+  //   console.error('Error parsing URL:', err);
+  //   return res.status(400).send('Invalid URL format');
+  // }
 
-  if (!videoId) {
-    return res.status(400).send('Video ID is required');
-  }
+  // const lang = req.body.lang || 'en';
 
-  try {
-    const captions = await getSubtitles({ videoID: videoId, lang: lang });
-    console.log("Captions:", captions);
+  // if (!videoId) {
+  //   return res.status(400).send('Video ID is required');
+  // }
 
-    if (!captions || captions.length === 0) {
-      return res.status(404).send('No subtitles found for this video');
-    }
+  // try {
+  //   const captions = await getSubtitles({ videoID: videoId, lang: lang });
+  //   console.log("Captions:", captions);
 
-    const subtitlesText = captions.map(caption => caption.text).join('\n');
+  //   if (!captions || captions.length === 0) {
+  //     return res.status(404).send('No subtitles found for this video');
+  //   }
 
-    res.setHeader('Content-Disposition', `attachment; filename=${videoId}_subtitles.txt`);
-    res.setHeader('Content-Type', 'text/plain');
+  //   const subtitlesText = captions.map(caption => caption.text).join('\n');
 
-    res.send(subtitlesText);
+  //   res.setHeader('Content-Disposition', `attachment; filename=${videoId}_subtitles.txt`);
+  //   res.setHeader('Content-Type', 'text/plain');
+
+  //   res.send(subtitlesText);
   } catch (err) {
     console.error("Error fetching subtitles:", err);
     res.status(500).send('Error fetching subtitles');
