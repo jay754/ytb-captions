@@ -20,12 +20,14 @@ app.post('/data', async (req, res) => {
   try {
     const videoUrl = new URL(req.body.url);
     videoId = videoUrl.searchParams.get("v");
-    
+
     if (!videoId) {
-      // Attempt to extract video ID from a shortened URL or other formats
       videoId = videoUrl.pathname.split('/')[1];
     }
+
+    console.log("Extracted Video ID:", videoId);
   } catch (err) {
+    console.error('Error parsing URL:', err);
     return res.status(400).send('Invalid URL format');
   }
 
@@ -36,29 +38,25 @@ app.post('/data', async (req, res) => {
   }
 
   try {
-    const captions = await getSubtitles({
-      videoID: videoId,
-      lang: lang
-    });
+    const captions = await getSubtitles({ videoID: videoId, lang: lang });
+    console.log("Captions:", captions);
 
-    if (captions.length === 0) {
+    if (!captions || captions.length === 0) {
       return res.status(404).send('No subtitles found for this video');
     }
 
-    // Prepare the subtitles text, one subtitle per line
     const subtitlesText = captions.map(caption => caption.text).join('\n');
 
-    // Set headers to force download
     res.setHeader('Content-Disposition', `attachment; filename=${videoId}_subtitles.txt`);
     res.setHeader('Content-Type', 'text/plain');
 
-    // Send the subtitles text directly
     res.send(subtitlesText);
   } catch (err) {
-    console.log('Error fetching subtitles:', err);
+    console.error("Error fetching subtitles:", err);
     res.status(500).send('Error fetching subtitles');
   }
 });
+
 
 const port = process.env.PORT || 3001;
 
