@@ -10,7 +10,12 @@ const cors = require('cors');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors());
+
+app.use(cors({
+  origin: '*', // or specify the domain making the request
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type'
+}));
 
 app.get('/hello', (req, res) => {
   res.send('Hello, world!');
