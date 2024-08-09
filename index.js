@@ -44,7 +44,8 @@ app.post('/data', async (req, res) => {
     return res.status(400).send('Video ID is required');
   }
 
-  const captions = await getSubtitles({ videoID: 'JWqD_8PiKpE', lang: lang });
+  // const captions = await getSubtitles({ videoID: 'JWqD_8PiKpE', lang: lang });
+  const subtitles = await getSubtitles({ videoID, lang });
   
   console.log("Captions:", captions);
 
