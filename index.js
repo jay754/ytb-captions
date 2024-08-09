@@ -40,12 +40,14 @@ app.post('/data', async (req, res) => {
   }
 
   try {
+    console.log("Fetching subtitles for video ID:", videoId);
     const subtitles = await getSubtitles({
       videoID: videoId,
       lang: req.body.lang || 'en'
     });
 
     if (!subtitles || subtitles.length === 0) {
+      console.error('No subtitles found for this video');
       return res.status(404).send('No subtitles found for this video');
     }
 
