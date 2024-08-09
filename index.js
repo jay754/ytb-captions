@@ -23,9 +23,7 @@ app.get('/hello', (req, res) => {
 
 app.post('/data', async (req, res) => {
   let videoId;
-
-  console.log("hello")
-
+  
   try {
     const videoUrl = new URL(req.body.url);
     videoId = videoUrl.searchParams.get("v");
@@ -33,8 +31,6 @@ app.post('/data', async (req, res) => {
     if (!videoId) {
       videoId = videoUrl.pathname.split('/')[1];
     }
-
-    console.log(videoId)
 
     console.log("Extracted Video ID:", videoId);
   } catch (err) {
@@ -48,7 +44,7 @@ app.post('/data', async (req, res) => {
     return res.status(400).send('Video ID is required');
   }
 
-  const captions = await getSubtitles({ videoID: videoId, lang: lang });
+  const captions = await getSubtitles({ videoID: 'JWqD_8PiKpE', lang: lang });
   
   console.log("Captions:", captions);
 
