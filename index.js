@@ -40,10 +40,9 @@ app.post('/data', async (req, res) => {
   }
 
   try {
-    // Fetch subtitles using getSubtitles from youtube-captions-scraper
     const subtitles = await getSubtitles({
-      videoID: videoId, // YouTube video ID
-      lang: req.body.lang || 'en' // Language of subtitles
+      videoID: videoId,
+      lang: req.body.lang || 'en'
     });
 
     if (!subtitles || subtitles.length === 0) {
@@ -57,10 +56,11 @@ app.post('/data', async (req, res) => {
 
     res.send(subtitlesText);
   } catch (err) {
-    console.error("Error fetching subtitles:", err);
-    res.status(500).send('Error fetching subtitles');
+    console.error("Error fetching subtitles:", err.message);
+    res.status(500).send('Error fetching subtitles: ' + err.message);
   }
 });
+
 
 const port = process.env.PORT || 3001;
 
