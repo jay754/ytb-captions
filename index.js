@@ -45,7 +45,7 @@ app.post('/data', async (req, res) => {
   }
 
   // const captions = await getSubtitles({ videoID: 'JWqD_8PiKpE', lang: lang });
-  const subtitles = await getSubtitles({ videoId, lang });
+  const subtitles = await getSubtitles({ 'JWqD_8PiKpE', lang });
   
   console.log("Captions:", captions);
 
